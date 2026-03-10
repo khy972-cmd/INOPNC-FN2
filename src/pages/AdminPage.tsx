@@ -49,24 +49,83 @@ const ADMIN_TABS = [
 
 type AdminTab = typeof ADMIN_TABS[number]["key"];
 
+// 관리자 콘솔 탭 컬러 톤 (그룹별로 통일된 팔레트 적용)
 const TAB_TONES: Record<AdminTab, { active: string; mobile: string }> = {
-  dashboard: { active: "bg-slate-100 text-slate-700 ring-1 ring-slate-200", mobile: "border-slate-200 bg-slate-100 text-slate-700" },
-  worklog: { active: "bg-sky-50 text-sky-700 ring-1 ring-sky-200", mobile: "border-sky-200 bg-sky-50 text-sky-700" },
-  site: { active: "bg-emerald-50 text-emerald-700 ring-1 ring-emerald-200", mobile: "border-emerald-200 bg-emerald-50 text-emerald-700" },
-  user: { active: "bg-cyan-50 text-cyan-700 ring-1 ring-cyan-200", mobile: "border-cyan-200 bg-cyan-50 text-cyan-700" },
-  photosheet: { active: "bg-amber-50 text-amber-800 ring-1 ring-amber-200", mobile: "border-amber-200 bg-amber-50 text-amber-800" },
-  deletion: { active: "bg-rose-50 text-rose-700 ring-1 ring-rose-200", mobile: "border-rose-200 bg-rose-50 text-rose-700" },
-  partner: { active: "bg-violet-50 text-violet-700 ring-1 ring-violet-200", mobile: "border-violet-200 bg-violet-50 text-violet-700" },
-  doc: { active: "bg-indigo-50 text-indigo-700 ring-1 ring-indigo-200", mobile: "border-indigo-200 bg-indigo-50 text-indigo-700" },
-  "signup-requests": { active: "bg-teal-50 text-teal-700 ring-1 ring-teal-200", mobile: "border-teal-200 bg-teal-50 text-teal-700" },
-  organizations: { active: "bg-fuchsia-50 text-fuchsia-700 ring-1 ring-fuchsia-200", mobile: "border-fuchsia-200 bg-fuchsia-50 text-fuchsia-700" },
-  salary: { active: "bg-lime-50 text-lime-700 ring-1 ring-lime-200", mobile: "border-lime-200 bg-lime-50 text-lime-700" },
-  "required-docs": { active: "bg-blue-50 text-blue-700 ring-1 ring-blue-200", mobile: "border-blue-200 bg-blue-50 text-blue-700" },
-  communication: { active: "bg-orange-50 text-orange-700 ring-1 ring-orange-200", mobile: "border-orange-200 bg-orange-50 text-orange-700" },
-  "system-settings": { active: "bg-zinc-100 text-zinc-700 ring-1 ring-zinc-200", mobile: "border-zinc-200 bg-zinc-100 text-zinc-700" },
-  "work-options": { active: "bg-slate-100 text-slate-700 ring-1 ring-slate-200", mobile: "border-slate-200 bg-slate-100 text-slate-700" },
-  "company-settings": { active: "bg-indigo-50 text-indigo-700 ring-1 ring-indigo-200", mobile: "border-indigo-200 bg-indigo-50 text-indigo-700" },
-  materials: { active: "bg-teal-50 text-teal-700 ring-1 ring-teal-200", mobile: "border-teal-200 bg-teal-50 text-teal-700" },
+  // 운영 그룹: 대시보드, 일지, 현장, 인력, 자재, 사진/도면, 문서
+  dashboard: {
+    active: "bg-sky-50 text-sky-800 ring-1 ring-sky-200",
+    mobile: "border-sky-200 bg-sky-50 text-sky-800",
+  },
+  worklog: {
+    active: "bg-sky-50 text-sky-800 ring-1 ring-sky-200",
+    mobile: "border-sky-200 bg-sky-50 text-sky-800",
+  },
+  site: {
+    active: "bg-sky-50 text-sky-800 ring-1 ring-sky-200",
+    mobile: "border-sky-200 bg-sky-50 text-sky-800",
+  },
+  user: {
+    active: "bg-sky-50 text-sky-800 ring-1 ring-sky-200",
+    mobile: "border-sky-200 bg-sky-50 text-sky-800",
+  },
+  materials: {
+    active: "bg-sky-50 text-sky-800 ring-1 ring-sky-200",
+    mobile: "border-sky-200 bg-sky-50 text-sky-800",
+  },
+  photosheet: {
+    active: "bg-sky-50 text-sky-800 ring-1 ring-sky-200",
+    mobile: "border-sky-200 bg-sky-50 text-sky-800",
+  },
+  doc: {
+    active: "bg-sky-50 text-sky-800 ring-1 ring-sky-200",
+    mobile: "border-sky-200 bg-sky-50 text-sky-800",
+  },
+
+  // 계정/조직 그룹: 가입요청, 파트너, 탈퇴요청, 소속관리
+  "signup-requests": {
+    active: "bg-teal-50 text-teal-800 ring-1 ring-teal-200",
+    mobile: "border-teal-200 bg-teal-50 text-teal-800",
+  },
+  partner: {
+    active: "bg-teal-50 text-teal-800 ring-1 ring-teal-200",
+    mobile: "border-teal-200 bg-teal-50 text-teal-800",
+  },
+  deletion: {
+    active: "bg-teal-50 text-teal-800 ring-1 ring-teal-200",
+    mobile: "border-teal-200 bg-teal-50 text-teal-800",
+  },
+  organizations: {
+    active: "bg-teal-50 text-teal-800 ring-1 ring-teal-200",
+    mobile: "border-teal-200 bg-teal-50 text-teal-800",
+  },
+
+  // 정산/서류 그룹: 급여, 필수서류, 이노피앤씨
+  salary: {
+    active: "bg-violet-50 text-violet-800 ring-1 ring-violet-200",
+    mobile: "border-violet-200 bg-violet-50 text-violet-800",
+  },
+  "required-docs": {
+    active: "bg-violet-50 text-violet-800 ring-1 ring-violet-200",
+    mobile: "border-violet-200 bg-violet-50 text-violet-800",
+  },
+  "company-settings": {
+    active: "bg-violet-50 text-violet-800 ring-1 ring-violet-200",
+    mobile: "border-violet-200 bg-violet-50 text-violet-800",
+  },
+
+  // 시스템/공지 그룹: 공지사항, 시스템설정, 작업옵션
+  communication: {
+    active: "bg-slate-100 text-slate-800 ring-1 ring-slate-200",
+    mobile: "border-slate-200 bg-slate-100 text-slate-800",
+  },
+  "system-settings": {
+    active: "bg-slate-100 text-slate-800 ring-1 ring-slate-200",
+    mobile: "border-slate-200 bg-slate-100 text-slate-800",
+  },
+  "work-options": {
+    active: "bg-slate-100 text-slate-800 ring-1 ring-slate-200",
+    mobile: "border-slate-200 bg-slate-100 text-slate-800",
+  },
 };
 
 export default function AdminPage() {

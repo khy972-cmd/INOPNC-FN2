@@ -1,4 +1,4 @@
-﻿import { useState, useMemo } from "react";
+import { useState, useMemo } from "react";
 import { Search, X, Plus, MapPin, Users, ChevronDown, Edit2, Trash2, UserPlus, ClipboardList } from "lucide-react";
 import { ADMIN_CORNER_BADGE_BASE, ADMIN_CORNER_BADGE_TONES } from "@/lib/adminBadgeStyles";
 import { cn } from "@/lib/utils";
@@ -461,7 +461,9 @@ function MemberAssignModal({ siteId, onClose }: { siteId: string; onClose: () =>
 
   const assignMutation = useMutation({
     mutationFn: async (userId: string) => {
-      const { error } = await supabase.from("site_members").insert({ site_id: siteId, user_id: userId, role: "worker" });
+      const { error } = await supabase
+        .from("site_members")
+        .insert({ site_id: siteId, user_id: userId, role: "worker" });
       if (error) throw error;
     },
     onSuccess: () => {
@@ -469,17 +471,27 @@ function MemberAssignModal({ siteId, onClose }: { siteId: string; onClose: () =>
       queryClient.invalidateQueries({ queryKey: ["admin-sites"] });
       toast.success("인원이 배정되었습니다");
     },
+    onError: (e: { message?: string }) => {
+      toast.error(e.message || "인원 배정에 실패했습니다");
+    },
   });
 
   const removeMutation = useMutation({
     mutationFn: async (memberId: string) => {
-      const { error } = await supabase.from("site_members").delete().eq("id", memberId);
+      const { error } = await supabase
+        .from("site_members")
+        .delete()
+        .eq("id", memberId)
+        .eq("site_id", siteId);
       if (error) throw error;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["site-members", siteId] });
       queryClient.invalidateQueries({ queryKey: ["admin-sites"] });
       toast.success("인원이 제외되었습니다");
+    },
+    onError: (e: { message?: string }) => {
+      toast.error(e.message || "인원 제외에 실패했습니다");
     },
   });
 
